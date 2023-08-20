@@ -68,21 +68,11 @@ jobs:
         # При помощи with передаём в action параметры username и password
         with:
           username: ${{ secrets.DOCKER_USERNAME }} 
-          password: ${{ sercets.DOCKER_PASSWORD }}
-          # Хорошо ли держать логин и пароль прямо в коде workflow?
-          # Нет, это нехорошо
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push to DockerHub
         # Одновременный билд и пуш образа в Docker Hub
         uses: docker/build-push-action@v4
         with:
-          # Параметр context: ./backend/ указывает, что нужный Dockerfile 
-          # находится в ./backend/
           context: ./backend/
-          # Параметр push: true указывает, что образ нужно не только собрать,
-          # но и отправить на Docker Hub
           push: true
-          # В параметре tags задаётся название и тег для образа.
-          # Для каждого пересобранного образа 
-          # устанавливаем тег latest, чтобы потом
-          # на сервере и в docker-compose.yml не указывать версию
-          tags: ваш-логин-на-docker-hub/taski_backend:latest
+          tags: ${{ secrets.DOCKER_PASSWORD }}/taski_backend:latest
